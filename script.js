@@ -6,9 +6,9 @@ canvas.height = window.innerHeight;
 // Create and add image elements
 function createCornerImages() {
     const images = [
-        { src: "public/images/image1.jpg", position: "top-left" },
+     
         { src: "public/images/image2.jpg", position: "top-right" },
-        { src: "public/images/image3.jpg", position: "bottom-right" }
+        { src: "public/images/image3.jpg", position: "bottom-left" }
     ];
 
     images.forEach(({ src, position }) => {
