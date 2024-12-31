@@ -1,11 +1,73 @@
+
 var canvas = document.getElementById("starfield");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// Create and add image elements
+function createCornerImages() {
+    const images = [
+        { src: "public/images/image1.jpg", position: "top-left" },
+        { src: "public/images/image2.jpg", position: "top-right" },
+        { src: "public/images/image3.jpg", position: "bottom-right" }
+    ];
+
+    images.forEach(({ src, position }) => {
+        const imgContainer = document.createElement("div");
+        const img = document.createElement("img");
+        
+        // Set image properties
+        img.src = src;
+        img.style.width = "150px";
+        img.style.height = "150px";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "50%";
+        img.style.border = "3px solid rgba(45, 45, 255, 0.5)";
+        img.style.boxShadow = "0 0 15px rgba(45, 45, 255, 0.3)";
+        
+        // Set container properties
+        imgContainer.style.position = "fixed";
+        imgContainer.style.zIndex = "1000";
+        imgContainer.style.transition = "transform 0.3s ease";
+        
+        // Position the container
+        switch(position) {
+            case "top-left":
+                imgContainer.style.top = "20px";
+                imgContainer.style.left = "20px";
+                break;
+            case "top-right":
+                imgContainer.style.top = "20px";
+                imgContainer.style.right = "20px";
+                break;
+            case "bottom-right":
+                imgContainer.style.bottom = "20px";
+                imgContainer.style.right = "20px";
+                break;
+        }
+        
+        // Add hover effect
+        imgContainer.addEventListener("mouseover", () => {
+            imgContainer.style.transform = "scale(1.1)";
+        });
+        
+        imgContainer.addEventListener("mouseout", () => {
+            imgContainer.style.transform = "scale(1)";
+        });
+        
+        imgContainer.appendChild(img);
+        document.body.appendChild(imgContainer);
+    });
+}
+
+// Call the function to create images
+createCornerImages();
+
+// Rest of your existing starfield code
 var context = canvas.getContext("2d");
 var stars = 500;
 var colorrange = [0, 60, 240];
 var starArray = [];
+
 
 function getRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
