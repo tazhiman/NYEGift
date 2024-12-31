@@ -3,59 +3,89 @@ var canvas = document.getElementById("starfield");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Create and add image elements
 function createCornerImages() {
+    // First create the SVG mask for the heart shape
+    const svgMask = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgMask.style.position = "absolute";
+    svgMask.style.width = "0";
+    svgMask.style.height = "0";
+    svgMask.innerHTML = `
+        <defs>
+            <clipPath id="heartPath">
+                <path d="M25,45 A20,20,0,0,1,5,25 A20,20,0,0,1,25,5 A20,20,0,0,1,45,25 A20,20,0,0,1,25,45 Z" />
+            </defs>
+        </clipPath>
+    `;
+    document.body.appendChild(svgMask);
+
     const images = [
-     
+       
         { src: "public/images/image2.jpg", position: "top-right" },
         { src: "public/images/image3.jpg", position: "bottom-left" }
     ];
 
     images.forEach(({ src, position }) => {
+        // Create container for heart effect
+        const heartContainer = document.createElement("div");
         const imgContainer = document.createElement("div");
         const img = document.createElement("img");
         
         // Set image properties
         img.src = src;
-        img.style.width = "150px";
-        img.style.height = "150px";
-        img.style.objectFit = "cover";
-        img.style.borderRadius = "50%";
-        img.style.border = "3px solid rgba(45, 45, 255, 0.5)";
-        img.style.boxShadow = "0 0 15px rgba(45, 45, 255, 0.3)";
         
-        // Set container properties
-        imgContainer.style.position = "fixed";
-        imgContainer.style.zIndex = "1000";
-        imgContainer.style.transition = "transform 0.3s ease";
+        // Style the heart container
+        heartContainer.style.position = "fixed";
+        heartContainer.style.zIndex = "1000";
+        heartContainer.style.transition = "transform 0.3s ease, filter 0.3s ease";
+        heartContainer.style.width = "150px";
+        heartContainer.style.height = "150px";
+        
+        // Style the image container
+        imgContainer.style.width = "100%";
+        imgContainer.style.height = "100%";
+        imgContainer.style.position = "relative";
+        imgContainer.style.overflow = "hidden";
+        imgContainer.style.clipPath = "path('M75,138.5 C38.7,99.4,2.3,67.4,11.1,37.3C19.9,7.3,61.3,6.9,75,33.4c13.7-26.5,55.1-26.1,63.9,3.9C147.7,67.4,111.3,99.4,75,138.5z')";
+        
+        // Style the image
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+        
+        // Add glowing border effect
+        heartContainer.style.filter = "drop-shadow(0 0 10px rgba(45, 45, 255, 0.5))";
         
         // Position the container
         switch(position) {
             case "top-left":
-                imgContainer.style.top = "20px";
-                imgContainer.style.left = "20px";
+                heartContainer.style.top = "20px";
+                heartContainer.style.left = "20px";
                 break;
             case "top-right":
-                imgContainer.style.top = "20px";
-                imgContainer.style.right = "20px";
+                heartContainer.style.top = "20px";
+                heartContainer.style.right = "20px";
                 break;
             case "bottom-right":
-                imgContainer.style.bottom = "20px";
-                imgContainer.style.right = "20px";
+                heartContainer.style.bottom = "20px";
+                heartContainer.style.right = "20px";
                 break;
         }
         
-        // Add hover effect
-        imgContainer.addEventListener("mouseover", () => {
-            imgContainer.style.transform = "scale(1.1)";
+        // Add hover effects
+        heartContainer.addEventListener("mouseover", () => {
+            heartContainer.style.transform = "scale(1.1) rotate(-5deg)";
+            heartContainer.style.filter = "drop-shadow(0 0 15px rgba(45, 45, 255, 0.8))";
         });
         
-        imgContainer.addEventListener("mouseout", () => {
-            imgContainer.style.transform = "scale(1)";
+        heartContainer.addEventListener("mouseout", () => {
+            heartContainer.style.transform = "scale(1) rotate(0deg)";
+            heartContainer.style.filter = "drop-shadow(0 0 10px rgba(45, 45, 255, 0.5))";
         });
         
+        // Assemble the elements
         imgContainer.appendChild(img);
-        document.body.appendChild(imgContainer);
+        heartContainer.appendChild(imgContainer);
+        document.body.appendChild(heartContainer);
     });
 }
 
